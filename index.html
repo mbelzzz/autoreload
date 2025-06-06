@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Ganti Gambar Otomatis</title>
+<style>
+  #image-container {
+    width: 400px;
+    height: 300px;
+    border: 1px solid #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+  #myImage {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+  }
+</style>
+</head>
+<body>
+
+<div id="image-container">
+  <img id="myImage" src="gambar1.jpg" alt="Gambar Otomatis">
+</div>
+
+<script>
+  const images = [
+    'gambar1.jpg',
+    'gambar2.jpg',
+    'gambar3.jpg',
+    'gambar4.jpg'
+  ]; // Daftar path gambar Anda
+  let currentIndex = 0;
+  const myImage = document.getElementById('myImage');
+
+  function changeImage() {
+    currentIndex = (currentIndex + 1) % images.length; // Pindah ke gambar berikutnya, kembali ke awal jika sudah di akhir
+    myImage.src = images[currentIndex];
+  }
+
+  // Ganti gambar setiap 3 detik (3000 milidetik)
+  setInterval(changeImage, 3000); 
+</script>
+
+</body>
+</html>

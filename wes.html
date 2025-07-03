@@ -3,60 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Parsing Parameter Sederhana</title>
+    <title>Halaman Utama dengan Iframe Parameter</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
-        div {
-            background-color: #f0f0f0;
+        .container { margin-bottom: 20px; }
+        input[type="text"] {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            margin-right: 5px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        iframe {
+            width: 100%;
+            height: 300px;
             border: 1px solid #ddd;
-            padding: 15px;
             border-radius: 5px;
             margin-top: 20px;
         }
-        strong { color: #0056b3; }
     </style>
 </head>
 <body>
 
-    <h1>Detail Halaman</h1>
-    <p>URL halaman ini mungkin memiliki parameter. Kita akan mengambilnya di sini.</p>
+    <h1>Halaman Utama</h1>
+    <p>Masukkan ID produk dan klik tombol untuk menampilkan detailnya di bawah (dalam iframe):</p>
 
-    <div id="parameterInfo">
-        <p><strong>Informasi Parameter dari URL:</strong></p>
-        <p>ID Produk: <span id="displayId">Tidak ada</span></p>
-        <p>Warna: <span id="displayWarna">Tidak ada</span></p>
-        <p>Ukuran: <span id="displayUkuran">Tidak ada</span></p>
-        <p>Nama: <span id="displayName">Tidak ada</span></p>
+    <div class="container">
+        <input type="text" id="productIdInput" placeholder="Masukkan ID Produk" value="PROD_XYZ_001">
+        <button onclick="loadContentInIframe()">Muat Detail di Iframe</button>
     </div>
 
+    <h2>Konten Detail Produk (dalam Iframe):</h2>
+    <iframe id="detailIframe" src="about:blank"></iframe>
+
     <script>
-        // Langkah 1: Dapatkan bagian "query string" dari URL saat ini
-        // Misalnya: '?id=produk123&warna=biru'
-        const queryString = window.location.search;
+        function loadContentInIframe() {
+            const productId = document.getElementById('productIdInput').value;
 
-        // Langkah 2: Buat objek URLSearchParams dari query string
-        // Ini akan memudahkan kita untuk mengambil parameter satu per satu
-        const urlParams = new URLSearchParams(queryString);
+            // Pastikan ID tidak kosong
+            if (!productId) {
+                alert("Mohon masukkan ID produk!");
+                return;
+            }
 
-        // Langkah 3: Ambil nilai parameter menggunakan metode .get()
-        // Masukkan nama parameter yang ingin Anda ambil (misal: 'id', 'warna', 'nama')
-        const productId = urlParams.get('id');
-        const color = urlParams.get('warna');
-        const size = urlParams.get('ukuran');
-        const userName = urlParams.get('nama'); // Contoh parameter lain
+            // Langkah 1 & 2: Buat URL dengan parameter ID
+            const iframeBaseUrl = "konten-iframe.html"; // Nama file untuk iframe
+            const params = new URLSearchParams();
+            params.append('id', productId);
+            params.append('sumber', 'halaman_utama'); // Contoh parameter tambahan
 
-        // Langkah 4: Tampilkan nilai yang didapatkan ke HTML
-        document.getElementById('displayId').textContent = productId ? productId : 'Tidak ditemukan';
-        document.getElementById('displayWarna').textContent = color ? color : 'Tidak ditemukan';
-        document.getElementById('displayUkuran').textContent = size ? size : 'Tidak ditemukan';
-        document.getElementById('displayName').textContent = userName ? userName : 'Tidak ditemukan';
+            const finalIframeUrl = `${iframeBaseUrl}?${params.toString()}`;
 
-        // Anda juga bisa melihat semua parameter yang ada (opsional)
-        console.log("Semua parameter yang ditemukan:");
-        urlParams.forEach((value, key) => {
-            console.log(`${key}: ${value}`);
-        });
+            // Langkah 3 (pengganti langkah 4 sebelumnya): Setel src iframe
+            const iframeElement = document.getElementById('detailIframe');
+            iframeElement.src = finalIframeUrl;
 
+            console.log("Memuat iframe dengan URL:", finalIframeUrl);
+        }
     </script>
 
 </body>

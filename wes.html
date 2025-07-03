@@ -3,55 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sederhana: JavaScript URL ID</title>
+    <title>Parsing Parameter Sederhana</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        button {
-            padding: 10px 15px;
-            background-color: #28a745;
-            color: white;
-            border: none;
+        body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
+        div {
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            padding: 15px;
             border-radius: 5px;
-            cursor: pointer;
-            margin-right: 10px;
+            margin-top: 20px;
         }
-        button:hover {
-            background-color: #218838;
-        }
-        input {
-            padding: 8px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            margin-right: 5px;
-        }
+        strong { color: #0056b3; }
     </style>
 </head>
 <body>
 
-    <h1>Buka Produk Berdasarkan Input ID</h1>
+    <h1>Detail Halaman</h1>
+    <p>URL halaman ini mungkin memiliki parameter. Kita akan mengambilnya di sini.</p>
 
-    <p>Masukkan ID produk dan klik tombol:</p>
-    <input type="text" id="inputProductId" placeholder="Contoh: P001" value="P001">
-    <button onclick="bukaHalamanProduk()">Buka Detail</button>
+    <div id="parameterInfo">
+        <p><strong>Informasi Parameter dari URL:</strong></p>
+        <p>ID Produk: <span id="displayId">Tidak ada</span></p>
+        <p>Warna: <span id="displayWarna">Tidak ada</span></p>
+        <p>Ukuran: <span id="displayUkuran">Tidak ada</span></p>
+        <p>Nama: <span id="displayName">Tidak ada</span></p>
+    </div>
 
     <script>
-        function bukaHalamanProduk() {
-            // Ambil nilai ID dari input teks
-            const productId = document.getElementById('inputProductId').value;
+        // Langkah 1: Dapatkan bagian "query string" dari URL saat ini
+        // Misalnya: '?id=produk123&warna=biru'
+        const queryString = window.location.search;
 
-            // Base URL halaman tujuan
-            const baseUrl = "wes.html";
+        // Langkah 2: Buat objek URLSearchParams dari query string
+        // Ini akan memudahkan kita untuk mengambil parameter satu per satu
+        const urlParams = new URLSearchParams(queryString);
 
-            // Gabungkan string untuk membuat URL lengkap
-            // Gunakan `encodeURIComponent` untuk memastikan ID aman di URL,
-            // terutama jika ada spasi atau karakter khusus lainnya.
-            const finalUrl = `${baseUrl}?id=${encodeURIComponent(productId)}`;
+        // Langkah 3: Ambil nilai parameter menggunakan metode .get()
+        // Masukkan nama parameter yang ingin Anda ambil (misal: 'id', 'warna', 'nama')
+        const productId = urlParams.get('id');
+        const color = urlParams.get('warna');
+        const size = urlParams.get('ukuran');
+        const userName = urlParams.get('nama'); // Contoh parameter lain
 
-            console.log("Mengarahkan ke:", finalUrl);
+        // Langkah 4: Tampilkan nilai yang didapatkan ke HTML
+        document.getElementById('displayId').textContent = productId ? productId : 'Tidak ditemukan';
+        document.getElementById('displayWarna').textContent = color ? color : 'Tidak ditemukan';
+        document.getElementById('displayUkuran').textContent = size ? size : 'Tidak ditemukan';
+        document.getElementById('displayName').textContent = userName ? userName : 'Tidak ditemukan';
 
-            // Redireksi browser ke URL tersebut
-            window.location.href = finalUrl;
-        }
+        // Anda juga bisa melihat semua parameter yang ada (opsional)
+        console.log("Semua parameter yang ditemukan:");
+        urlParams.forEach((value, key) => {
+            console.log(`${key}: ${value}`);
+        });
+
     </script>
 
 </body>

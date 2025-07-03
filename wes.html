@@ -3,33 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redireksi Otomatis dengan Parameter</title>
+    <title>Parsing Parameter Sederhana</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
+        div {
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        strong { color: #0056b3; }
+    </style>
 </head>
 <body>
 
-    <h1>Mengalihkan Halaman...</h1>
-    <p>Halaman ini akan mengalihkan Anda ke halaman detail produk dalam beberapa detik.</p>
+    <h1>Detail Halaman</h1>
+    <p>URL halaman ini mungkin memiliki parameter. Kita akan mengambilnya di sini.</p>
+
+    <div id="parameterInfo">
+        <p><strong>Informasi Parameter dari URL:</strong></p>
+        <p>ID Produk: <span id="displayId">Tidak ada</span></p>
+    </div>
 
     <script>
+        // Langkah 1: Dapatkan bagian "query string" dari URL saat ini
+        // Misalnya: '?id=produk123&warna=biru'
+        const queryString = window.location.search;
 
-        // Tentukan Base URL
-        const targetBaseUrl = "wes.html";
+        // Langkah 2: Buat objek URLSearchParams dari query string
+        // Ini akan memudahkan kita untuk mengambil parameter satu per satu
+        const urlParams = new URLSearchParams(queryString);
 
-        // Bangun parameter URL
-        const params = new URLSearchParams();
-        params.append('id', dynamicProductId);
-
-        // Gabungkan Base URL dengan Query String
-        const finalRedirectUrl = `${targetBaseUrl}?${params.toString()}`;
-
-        // Lakukan redireksi setelah 3 detik (opsional, bisa langsung)
-        setTimeout(() => {
-            console.log("Mengalihkan ke:", finalRedirectUrl);
-            window.location.href = finalRedirectUrl;
-        }, 20000); // Redireksi setelah 3 detik
-        
-        // Untuk redireksi langsung tanpa delay:
-        // window.location.href = finalRedirectUrl;
+        // Langkah 3: Ambil nilai parameter menggunakan metode .get()
+        // Masukkan nama parameter yang ingin Anda ambil (misal: 'id', 'warna', 'nama')
+        const productId = urlParams.get('id');
+        // Langkah 4: Tampilkan nilai yang didapatkan ke HTML
+        window.location.href = displayId;
     </script>
 
 </body>
